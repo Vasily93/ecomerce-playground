@@ -10,18 +10,19 @@ class UserRepository {
             fs.accessSync(this.filename); //checking if file already exists
             console.log('already exists')
         } catch (error) {
-            fs.writeFileSync(this.filename, '[{"name": "Vaasily"}]'); //creating a file
+            fs.writeFileSync(this.filename, '[{"name": "Vasily"}]'); //creating a file
         }
     }
     async getAll() {
-        const contents = fs.promises.readFile(this.filename, {
+        const data = JSON.parse(await fs.promises.readFile(this.filename, {
             encoding: 'utf8'
-        });
-        console.log(contents);
+        }));
+        console.log('Content parsed ----',data);
+        return data;
     }
 }
 
-const test = async () => { //!!!! Promise doent resolves
+const test = async () => { 
     console.log('testing!')
     const repo = new UserRepository('users.json');
     await repo.getAll();
