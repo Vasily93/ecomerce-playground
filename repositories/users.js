@@ -42,11 +42,19 @@ class UserRepository {
         records = records.filter(user => user.id !== id);
         await this.writeAll(records);
     }
-    async getOneBy(key, value) {
+    async getOneBy(filters) {
         const records = await this.getAll();
-        const result = records.filter(user => user[key] === value);
-        console.log('result', result);
-        return result;
+        for(let record of records) {
+            let found = true;
+            for(let key in filters) {
+                if(record[key] !== filters[key]) {
+                    found = false;
+                }
+            }
+            if(found) {
+                return record;
+            }
+        }
     }
     async update(id, attrs) {
         const records = await this. getAll();
@@ -62,6 +70,6 @@ class UserRepository {
 const test = async () => { 
     console.log('testing!')
     const repo = new UserRepository('users.json');
-    await repo.update('e059e7cdsdf',{name: 'Leha'});
+    await repo.getOneBy({id: 'e059e7cd'});
 }
 test(); 
