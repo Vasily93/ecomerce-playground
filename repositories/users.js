@@ -11,7 +11,7 @@ class UserRepository {
             fs.accessSync(this.filename); //checking if file already exists
             console.log('already exists')
         } catch (error) {
-            fs.writeFileSync(this.filename, '[{"name": "Vasily"}]'); //creating a file
+            fs.writeFileSync(this.filename, '[]'); //creating a file
         }
     }
     async getAll() { //returning all userers data
@@ -67,9 +67,4 @@ class UserRepository {
     }
 }
 
-const test = async () => { 
-    console.log('testing!')
-    const repo = new UserRepository('users.json');
-    await repo.getOneBy({id: 'e059e7cd'});
-}
-test(); 
+module.exports = new UserRepository('users.json');
