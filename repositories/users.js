@@ -18,7 +18,6 @@ class UserRepository {
         const data = JSON.parse(await fs.promises.readFile(this.filename, {
             encoding: 'utf8'
         }));
-        console.log('Content parsed ----',data);
         return data;
     }
     async create(attrs) { //creating and adding new user to db
@@ -33,12 +32,36 @@ class UserRepository {
     randomID () {
         return crypto.randomBytes(4).toString('hex');
     }
+    async getOne(id) {
+        const records = await this.getAll();
+        const user = records.find(record => record.id === id);
+        return user;
+    }
+    async delete(id) {
+        let records = await this.getAll();
+        records = records.filter(user => user.id !== id);
+        await this.writeAll(records);
+    }
+    async getOneBy(key, value) {
+        const records = await this.getAll();
+        const result = records.filter(user => user[key] === value);
+        console.log('result', result);
+        return result;
+    }
+    async update(id, attrs) {
+        const records = await this. getAll();
+        const record = records.find(record => record.id === id);
+        if(!record) {
+            throw new Error('Sorry, user was not found!');
+        }
+        Object.assign(record, attrs);
+        await this.writeAll(records);
+    }
 }
 
 const test = async () => { 
     console.log('testing!')
     const repo = new UserRepository('users.json');
-    await repo.create({name: 'Gleb'})
-    await repo.getAll();
+    await repo.update('e059e7cdsdf',{name: 'Leha'});
 }
 test(); 
