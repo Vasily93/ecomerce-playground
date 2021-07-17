@@ -25,6 +25,8 @@ class UserRepository {
         const records = await this.getAll();
         records.push(attrs);
         await this.writeAll(records);
+
+        return attrs;
     }
     async writeAll(records) { // func to save all records to a file
         await fs.promises.writeFile(this.filename, JSON.stringify(records, null, 2));
